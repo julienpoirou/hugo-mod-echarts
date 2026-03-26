@@ -1,0 +1,10 @@
+.hugo-mod-echarts__output {
+  width: 100%;
+}
+
+.hugo-mod-echarts__output.is-error {
+  color: #b42318;
+  font-family: monospace;
+  padding: 1rem;
+  white-space: pre-wrap;
+}
