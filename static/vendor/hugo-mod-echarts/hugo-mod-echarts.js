@@ -36,6 +36,7 @@
       });
       chart.setOption(options);
       element._hugoModEchartsChart = chart;
+      observeResize(element, output);
       output.classList.remove("is-error");
       element.dataset.rendered = "true";
     } catch (error) {
@@ -48,13 +49,34 @@
     root.querySelectorAll("[data-hugo-mod-echarts]").forEach(renderElement);
   };
 
-  window.addEventListener("resize", () => {
-    document.querySelectorAll("[data-hugo-mod-echarts]").forEach((element) => {
-      if (element._hugoModEchartsChart) {
-        element._hugoModEchartsChart.resize();
-      }
+  // Track each chart's own container instead of a page-wide window resize
+  // sweep: layout changes (sidebars, container queries) resize charts too.
+  let resizeObserver = null;
+  const observeResize = (element, output) => {
+    if (typeof ResizeObserver === "undefined") return;
+    if (!resizeObserver) {
+      resizeObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => {
+          const host = entry.target.closest("[data-hugo-mod-echarts]");
+          if (host && host._hugoModEchartsChart) {
+            host._hugoModEchartsChart.resize();
+          }
+        });
+      });
+    }
+    resizeObserver.observe(output);
+  };
+
+  if (typeof ResizeObserver === "undefined") {
+    // Fallback for engines without ResizeObserver.
+    window.addEventListener("resize", () => {
+      document.querySelectorAll("[data-hugo-mod-echarts]").forEach((element) => {
+        if (element._hugoModEchartsChart) {
+          element._hugoModEchartsChart.resize();
+        }
+      });
     });
-  });
+  }
 
   // Deferred scripts all execute before DOMContentLoaded, so waiting for it
   // guarantees the optional echarts-gl bundle is registered before the first
