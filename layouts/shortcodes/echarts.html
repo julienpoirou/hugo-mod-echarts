@@ -11,10 +11,10 @@
   {{- $source = readFile (printf "assets/%s" $src) -}}
 {{- end -}}
 {{- if not (.Page.Scratch.Get "hugoModEchartsLoaded") -}}
-  <script src="{{ "vendor/hugo-mod-echarts/echarts.min.js" | relURL }}"></script>
-  <script src="{{ "vendor/hugo-mod-echarts/echarts-gl.min.js" | relURL }}"></script>
+  <script defer src="{{ "vendor/hugo-mod-echarts/echarts.min.js" | relURL }}"></script>
+  <script defer src="{{ "vendor/hugo-mod-echarts/echarts-gl.min.js" | relURL }}"></script>
   <link rel="stylesheet" href="{{ "vendor/hugo-mod-echarts/hugo-mod-echarts.css" | relURL }}">
-  <script src="{{ "vendor/hugo-mod-echarts/hugo-mod-echarts.js" | relURL }}"></script>
+  <script defer src="{{ "vendor/hugo-mod-echarts/hugo-mod-echarts.js" | relURL }}"></script>
   {{- .Page.Scratch.Set "hugoModEchartsLoaded" true -}}
 {{- end -}}
 {{- if eq $encodedSource "" -}}
