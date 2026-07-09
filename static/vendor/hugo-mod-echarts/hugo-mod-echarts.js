@@ -56,10 +56,20 @@
     });
   });
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => renderAll(), { once: true });
-  } else {
+  // Deferred scripts all execute before DOMContentLoaded, so waiting for it
+  // guarantees the optional echarts-gl bundle is registered before the first
+  // render, regardless of where its script tag sits in the document.
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
     renderAll();
+  };
+  if (document.readyState === "complete") {
+    start();
+  } else {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+    window.addEventListener("load", start, { once: true });
   }
 
   window.HugoModEcharts = { renderAll };

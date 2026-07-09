@@ -1,6 +1,7 @@
 {{- $height := default "420px" (.Get "height") -}}
 {{- $theme := default "" (.Get "theme") -}}
 {{- $renderer := default "canvas" (.Get "renderer") -}}
+{{- $gl := eq (printf "%v" (or (.Get "gl") "false")) "true" -}}
 {{- $source := or .Inner "" -}}
 {{- $src := or (.Get "src") "" -}}
 {{- $encodedSource := "" -}}
@@ -12,10 +13,13 @@
 {{- end -}}
 {{- if not (.Page.Scratch.Get "hugoModEchartsLoaded") -}}
   <script defer src="{{ "vendor/hugo-mod-echarts/echarts.min.js" | relURL }}"></script>
-  <script defer src="{{ "vendor/hugo-mod-echarts/echarts-gl.min.js" | relURL }}"></script>
   <link rel="stylesheet" href="{{ "vendor/hugo-mod-echarts/hugo-mod-echarts.css" | relURL }}">
   <script defer src="{{ "vendor/hugo-mod-echarts/hugo-mod-echarts.js" | relURL }}"></script>
   {{- .Page.Scratch.Set "hugoModEchartsLoaded" true -}}
+{{- end -}}
+{{- if and $gl (not (.Page.Scratch.Get "hugoModEchartsGlLoaded")) -}}
+  <script defer src="{{ "vendor/hugo-mod-echarts/echarts-gl.min.js" | relURL }}"></script>
+  {{- .Page.Scratch.Set "hugoModEchartsGlLoaded" true -}}
 {{- end -}}
 {{- if eq $encodedSource "" -}}
   {{- $source = trim $source " \n\r\t" -}}
