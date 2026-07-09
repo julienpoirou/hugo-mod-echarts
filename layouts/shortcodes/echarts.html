@@ -1,8 +1,8 @@
 {{- $height := default "420px" (.Get "height") -}}
 {{- $theme := default "" (.Get "theme") -}}
 {{- $renderer := default "canvas" (.Get "renderer") -}}
-{{- $source := .Inner -}}
-{{- $src := .Get "src" -}}
+{{- $source := or .Inner "" -}}
+{{- $src := or (.Get "src") "" -}}
 {{- $encodedSource := "" -}}
 {{- with .Get "b64" -}}
   {{- $encodedSource = . -}}
