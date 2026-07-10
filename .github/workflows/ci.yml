@@ -58,8 +58,8 @@ jobs:
               source = "_modules/hugo-mod-echarts/layouts"
               target = "layouts"
             [[module.mounts]]
-              source = "_modules/hugo-mod-echarts/static"
-              target = "static"
+              source = "_modules/hugo-mod-echarts/assets"
+              target = "assets"
           EOF
 
           cat > "${SITE_DIR}/assets/renderers/echarts.json" <<'EOF'
@@ -92,9 +92,17 @@ jobs:
           hugo --source "${SITE_DIR}" --destination "${OUT_DIR}"
           PAGE="${OUT_DIR}/test/index.html"
 
-          # Assets injected, and only once for the whole page.
-          grep -q 'vendor/hugo-mod-echarts/hugo-mod-echarts.js' "${PAGE}"
-          test "$(grep -c 'hugo-mod-echarts.js' "${PAGE}")" -eq 1
+          # Assets are fingerprinted (cache-busting) and injected only once
+          # for the whole page.
+          grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}"
+          test "$(grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | wc -l)" -eq 1
+
+          # Every injected asset ships a matching Subresource Integrity hash.
+          test "$(grep -c 'integrity="sha256-' "${PAGE}")" -eq 3
+
+          # The fingerprinted files are actually published at that path.
+          JS_PATH=$(grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | head -1)
+          test -f "${OUT_DIR}/${JS_PATH}"
 
           # All three input modes produce a wrapper.
           test "$(grep -c 'data-hugo-mod-echarts' "${PAGE}")" -eq 3
@@ -103,7 +111,7 @@ jobs:
           grep -q 'data-theme="dark" data-renderer="svg"' "${PAGE}"
 
           # echarts-gl is not loaded unless a shortcode opts in with gl="true".
-          if grep -q 'echarts-gl.min.js' "${PAGE}"; then
+          if grep -qE 'echarts-gl\.min\.[0-9a-f]+\.js' "${PAGE}"; then
             echo "echarts-gl must not load without gl=true" >&2
             exit 1
           fi
@@ -130,7 +138,7 @@ jobs:
           {{< /echarts >}}
           EOF
           hugo --source "${SITE_DIR}" --destination "${OUT_DIR}"
-          test "$(grep -c 'echarts-gl.min.js' "${OUT_DIR}/gl/index.html")" -eq 1
+          test "$(grep -oE 'echarts-gl\.min\.[0-9a-f]+\.js' "${OUT_DIR}/gl/index.html" | wc -l)" -eq 1
 
           # An empty source must fail the build explicitly.
           cat > "${SITE_DIR}/content/invalid.md" <<'EOF'

@@ -97,12 +97,18 @@ appear.
 
 ## Output assets
 
-The module publishes:
+The module publishes, through Hugo Pipes (`resources.Get` + `fingerprint`),
+so each file's published URL includes a content hash for cache-busting and
+ships a Subresource Integrity attribute:
 
-- `vendor/hugo-mod-echarts/echarts.min.js`
-- `vendor/hugo-mod-echarts/echarts-gl.min.js`
-- `vendor/hugo-mod-echarts/hugo-mod-echarts.js`
-- `vendor/hugo-mod-echarts/hugo-mod-echarts.css`
+- `vendor/hugo-mod-echarts/echarts.<hash>.min.js`
+- `vendor/hugo-mod-echarts/echarts-gl.<hash>.min.js` (only when `gl="true"`)
+- `vendor/hugo-mod-echarts/hugo-mod-echarts.<hash>.js`
+- `vendor/hugo-mod-echarts/hugo-mod-echarts.<hash>.css`
+
+Source files live under `assets/vendor/hugo-mod-echarts/` in this
+repository; see [`VENDORED.md`](VENDORED.md) for their unfingerprinted
+checksums.
 
 ## Development
 
