@@ -70,14 +70,78 @@ jobs:
           }
           EOF
 
-          cat > "${SITE_DIR}/content/test.md" <<'EOF'
+          B64_SOURCE=$(printf '{"series":[{"type":"pie","data":[1,2]}]}' | base64 -w0)
+
+          cat > "${SITE_DIR}/content/test.md" <<EOF
           ---
           title: "ECharts test"
           ---
 
           {{< echarts height="320px" src="renderers/echarts.json" />}}
+
+          {{< echarts theme="dark" renderer="svg" >}}
+          {
+            "title": { "text": "Ventes — région Été" },
+            "series": [{ "type": "line", "data": [3, 1, 4] }]
+          }
+          {{< /echarts >}}
+
+          {{< echarts b64="${B64_SOURCE}" />}}
           EOF
 
           hugo --source "${SITE_DIR}" --destination "${OUT_DIR}"
-          grep -q 'vendor/hugo-mod-echarts/hugo-mod-echarts.js' "${OUT_DIR}/test/index.html"
-          grep -q 'data-hugo-mod-echarts' "${OUT_DIR}/test/index.html"
+          PAGE="${OUT_DIR}/test/index.html"
+
+          # Assets injected, and only once for the whole page.
+          grep -q 'vendor/hugo-mod-echarts/hugo-mod-echarts.js' "${PAGE}"
+          test "$(grep -c 'hugo-mod-echarts.js' "${PAGE}")" -eq 1
+
+          # All three input modes produce a wrapper.
+          test "$(grep -c 'data-hugo-mod-echarts' "${PAGE}")" -eq 3
+
+          # theme and renderer params are forwarded as data attributes.
+          grep -q 'data-theme="dark" data-renderer="svg"' "${PAGE}"
+
+          # echarts-gl is not loaded unless a shortcode opts in with gl="true".
+          if grep -q 'echarts-gl.min.js' "${PAGE}"; then
+            echo "echarts-gl must not load without gl=true" >&2
+            exit 1
+          fi
+
+          # Inline UTF-8 source survives the base64 round-trip untouched.
+          # Hugo escapes "+" as "&#43;" in attributes; browsers unescape it,
+          # so the assertion must do the same before decoding.
+          grep -o 'data-source="[^"]*"' "${PAGE}" | sed -n '2p' \
+            | sed 's/data-source="//;s/"$//;s/&#43;/+/g' | base64 -d \
+            | grep -q "Ventes — région Été"
+
+          # gl="true" loads echarts-gl exactly once, deduped page-wide.
+          cat > "${SITE_DIR}/content/gl.md" <<'EOF'
+          ---
+          title: "ECharts GL test"
+          ---
+
+          {{< echarts gl="true" >}}
+          {"series":[{"type":"scatter3D","data":[[1,2,3]]}]}
+          {{< /echarts >}}
+
+          {{< echarts gl="true" >}}
+          {"series":[{"type":"bar3D","data":[[1,2,3]]}]}
+          {{< /echarts >}}
+          EOF
+          hugo --source "${SITE_DIR}" --destination "${OUT_DIR}"
+          test "$(grep -c 'echarts-gl.min.js' "${OUT_DIR}/gl/index.html")" -eq 1
+
+          # An empty source must fail the build explicitly.
+          cat > "${SITE_DIR}/content/invalid.md" <<'EOF'
+          ---
+          title: "invalid"
+          ---
+
+          {{< echarts >}}
+          {{< /echarts >}}
+          EOF
+          if hugo --source "${SITE_DIR}" --destination "${RUNNER_TEMP}/public-invalid"; then
+            echo "expected the build to fail on an empty shortcode source" >&2
+            exit 1
+          fi
