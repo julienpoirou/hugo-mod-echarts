@@ -55,6 +55,46 @@ File source:
 {{< echarts height="320px" src="renderers/echarts.json" />}}
 ```
 
+Base64 source (when the JSON would otherwise conflict with Markdown or
+shortcode parsing):
+
+```text
+{{< echarts b64="eyJzZXJpZXMiOlt7InR5cGUiOiJwaWUiLCJkYXRhIjpbMSwyXX1dfQ==" />}}
+```
+
+## Parameters
+
+| Param | Default | Description |
+|---|---|---|
+| `height` | `420px` | CSS height of the chart container. |
+| `theme` | *(none)* | ECharts built-in/registered theme name (e.g. `dark`). |
+| `renderer` | `canvas` | ECharts renderer: `canvas` or `svg`. |
+| `gl` | `false` | Set `true` to load `echarts-gl` for 3D/WebGL charts (see below). |
+| `src` | *(none)* | Path under `assets/` to a JSON options file. |
+| `b64` | *(none)* | Base64-encoded JSON options. |
+
+## Options are JSON, not JavaScript
+
+The chart option is parsed with `JSON.parse`, so it must be **pure JSON**.
+Features that require JavaScript values — `formatter` callbacks, functions in
+`tooltip`/`label`, `Date` objects — are not supported by design (author
+content is never evaluated as code). Provide such values through pre-computed
+data or formatted strings instead.
+
+## 3D / WebGL charts
+
+`echarts-gl` (~640 kB) is **not** loaded by default. Enable it per shortcode
+for 3D chart types:
+
+```text
+{{< echarts gl="true" >}}
+{"series":[{"type":"scatter3D","data":[[1,2,3]]}]}
+{{< /echarts >}}
+```
+
+It is injected once per page, regardless of how many `gl="true"` shortcodes
+appear.
+
 ## Output assets
 
 The module publishes:
