@@ -5,3 +5,6 @@
 .hugo_build.lock
 public/
 resources/
+
+# Test tooling (Playwright, installed browsers)
+node_modules/

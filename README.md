@@ -67,7 +67,7 @@ shortcode parsing):
 | Param | Default | Description |
 |---|---|---|
 | `height` | `420px` | CSS height of the chart container. |
-| `theme` | *(none)* | ECharts built-in/registered theme name (e.g. `dark`). |
+| `theme` | *(none)* | Name of a theme already registered with `echarts.registerTheme()`. **The vendored bundle ships no themes** — passing an unregistered name (e.g. `dark`, which is not built in) throws and the wrapper renders a visible error message instead of a chart. Register your theme in your own script, before this module's runtime script executes, to use this param. |
 | `renderer` | `canvas` | ECharts renderer: `canvas` or `svg`. |
 | `gl` | `false` | Set `true` to load `echarts-gl` for 3D/WebGL charts (see below). |
 | `src` | *(none)* | Path under `assets/` to a JSON options file. |
