@@ -19,19 +19,26 @@ const CONTENT_TYPES = {
 };
 
 function serve(rootDir, port) {
+  const resolvedRoot = path.resolve(rootDir);
   const server = http.createServer((req, res) => {
     const urlPath = decodeURIComponent(req.url.split("?")[0]);
-    let filePath = path.join(rootDir, urlPath);
+    let filePath = path.join(resolvedRoot, urlPath);
     if (urlPath.endsWith("/")) {
       filePath = path.join(filePath, "index.html");
     }
-    fs.readFile(filePath, (error, data) => {
+    const resolvedPath = path.resolve(filePath);
+    if (resolvedPath !== resolvedRoot && !resolvedPath.startsWith(resolvedRoot + path.sep)) {
+      res.writeHead(400);
+      res.end("bad request");
+      return;
+    }
+    fs.readFile(resolvedPath, (error, data) => {
       if (error) {
         res.writeHead(404);
         res.end("not found");
         return;
       }
-      const ext = path.extname(filePath);
+      const ext = path.extname(resolvedPath);
       res.writeHead(200, { "Content-Type": CONTENT_TYPES[ext] || "application/octet-stream" });
       res.end(data);
     });
