@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.1...v0.2.2) (2026-07-14)
+
+
+### Corrections 🐛
+
+* **assets:** Move vendored assets out of a "vendor/" path component ([09e839c](https://github.com/julienpoirou/hugo-mod-echarts/commit/09e839c5847bd9a1d38ab1c5a765067e15fd8f06))
+
 ## [0.2.1](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.0...v0.2.1) (2026-07-10)
 
 
