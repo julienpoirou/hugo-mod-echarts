@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.2...v0.2.3) (2026-07-14)
+
+
+### Corrections 🐛
+
+* **tests:** Contain served paths within rootDir in serve.js ([58d86a9](https://github.com/julienpoirou/hugo-mod-echarts/commit/58d86a9853d5b770c4f8e5731b2d2bf85833fa09))
+
 ## [0.2.2](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.1...v0.2.2) (2026-07-14)
 
 
