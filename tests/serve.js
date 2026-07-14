@@ -1,5 +1,5 @@
 // Minimal static file server for CI render verification.
-// Hugo emits root-relative asset paths (e.g. /vendor/...), which do not
+// Hugo emits root-relative asset paths (e.g. /libs/...), which do not
 // resolve under a file:// URL, so the built site must be served over http.
 "use strict";
 

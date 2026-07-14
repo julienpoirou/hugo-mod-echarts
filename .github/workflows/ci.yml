@@ -94,14 +94,14 @@ jobs:
 
           # Assets are fingerprinted (cache-busting) and injected only once
           # for the whole page.
-          grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}"
-          test "$(grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | wc -l)" -eq 1
+          grep -oE 'libs/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}"
+          test "$(grep -oE 'libs/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | wc -l)" -eq 1
 
           # Every injected asset ships a matching Subresource Integrity hash.
           test "$(grep -c 'integrity="sha256-' "${PAGE}")" -eq 3
 
           # The fingerprinted files are actually published at that path.
-          JS_PATH=$(grep -oE 'vendor/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | head -1)
+          JS_PATH=$(grep -oE 'libs/hugo-mod-echarts/hugo-mod-echarts\.[0-9a-f]+\.js' "${PAGE}" | head -1)
           test -f "${OUT_DIR}/${JS_PATH}"
 
           # All three input modes produce a wrapper.
