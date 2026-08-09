@@ -81,7 +81,7 @@ jobs:
 
           {{< echarts theme="dark" renderer="svg" >}}
           {
-            "title": { "text": "Ventes — région Été" },
+            "title": { "text": "Ventes - région Été" },
             "series": [{ "type": "line", "data": [3, 1, 4] }]
           }
           {{< /echarts >}}
@@ -121,7 +121,7 @@ jobs:
           # so the assertion must do the same before decoding.
           grep -o 'data-source="[^"]*"' "${PAGE}" | sed -n '2p' \
             | sed 's/data-source="//;s/"$//;s/&#43;/+/g' | base64 -d \
-            | grep -q "Ventes — région Été"
+            | grep -q "Ventes - région Été"
 
           # gl="true" loads echarts-gl exactly once, deduped page-wide.
           cat > "${SITE_DIR}/content/gl.md" <<'EOF'
