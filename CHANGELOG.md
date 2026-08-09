@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.3...v0.2.4) (2026-08-09)
+
+
+### Corrections 🐛
+
+* **security:** Uncontrolled data used in path expression ([caf054b](https://github.com/julienpoirou/hugo-mod-echarts/commit/caf054be43694fea0dc478c0db2f71e275df5d51))
+
 ## [0.2.3](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.2...v0.2.3) (2026-07-14)
 
 
