@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "Declares the third-party libraries this module vendors under assets/libs/. Never installed at build time or at runtime: it exists so Dependabot tracks their versions and GitHub raises security alerts on the code we actually ship. See ../VENDORED.md.",
   "dependencies": {
-    "echarts": "5.6.0",
+    "echarts": "6.1.0",
     "echarts-gl": "2.1.0"
   },
   "vendored": {
