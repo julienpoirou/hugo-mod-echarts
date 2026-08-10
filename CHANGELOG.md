@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.4...v0.3.0) (2026-08-10)
+
+
+### Features ✨
+
+* **assets:** Update echarts to 6.1.0 ([d4a653d](https://github.com/julienpoirou/hugo-mod-echarts/commit/d4a653d6643a2775667107884d97f3c86b179acf))
+
 ## [0.2.4](https://github.com/julienpoirou/hugo-mod-echarts/compare/v0.2.3...v0.2.4) (2026-08-09)
 
 
