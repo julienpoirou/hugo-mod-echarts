@@ -1,0 +1,24 @@
+{
+  "name": "hugo-mod-echarts-vendored",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Declares the third-party libraries this module vendors under assets/libs/. Never installed at build time or at runtime: it exists so Dependabot tracks their versions and GitHub raises security alerts on the code we actually ship. See ../VENDORED.md.",
+  "dependencies": {
+    "echarts": "5.6.0",
+    "echarts-gl": "2.1.0"
+  },
+  "vendored": {
+    "echarts.min.js": {
+      "path": "assets/libs/hugo-mod-echarts/echarts.min.js",
+      "package": "echarts",
+      "source": "https://cdn.jsdelivr.net/npm/echarts@{version}/dist/echarts.min.js",
+      "sha256": "bf4a223524e40b77c304bec67e1222cf551f14880cf42c69dc046558e11c07b1"
+    },
+    "echarts-gl.min.js": {
+      "path": "assets/libs/hugo-mod-echarts/echarts-gl.min.js",
+      "package": "echarts-gl",
+      "source": "https://cdn.jsdelivr.net/npm/echarts-gl@{version}/dist/echarts-gl.min.js",
+      "sha256": "d6d60f2165ce3eb1ea360ef62e8490835e0ae2c1e0c1788a772fff918e350842"
+    }
+  }
+}
