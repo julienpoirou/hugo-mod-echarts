@@ -18,17 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install shellcheck
-        run: sudo apt-get install -y shellcheck
-
-      - name: Download actionlint
-        run: |
-          set -euo pipefail
-          mkdir -p bin
-          curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash \
-            | bash -s -- 1.7.12 bin
-
       - name: Run actionlint
+        uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        with:
+          args: -color
         env:
           SHELLCHECK_OPTS: "-e SC2059 -e SC2129 -e SC2012 -e SC2035"
-        run: bin/actionlint -color
